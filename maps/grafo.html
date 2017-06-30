@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="lib/easeljs-0.8.2.min.js"></script>
+        <script>
+            function init() {
+                var nodos = [];
+                var i = 0;
+                var x = 0;
+                var y = 0;
+
+                function Nodo(id, lat, long) {
+                    this.id = id;
+                    this.lat = lat;
+                    this.long = long;
+                }
+
+                function createLine(ox, oy, dx, dy, stage) {
+                    var line = new createjs.Shape();
+                    line.graphics.setStrokeStyle(1).beginStroke("#000000");
+                    line.graphics.moveTo(ox, oy);
+                    line.graphics.lineTo(dx, dy);
+                    line.graphics.endStroke();
+
+                    var txtX = (ox + dx) / 2;
+                    var txtY = (oy + dy) / 2;
+                    var euclidean = (Math.sqrt(Math.pow((ox - dx),2) + Math.pow((oy - dy),2)));
+                    var text = new createjs.Text(euclidean.toFixed(2) + "", "8pt Arial").set({x: txtX + 15, y: txtY});
+                    text.textBaseline = "alphabetic";
+                    stage.addChild(text, line);
+               
+                }
+
+                function createNode(nodo, stage) {
+                    var circle = new createjs.Container();
+                    circle.mouseChildren = false;
+                    circle.name = nodo.id + 1;
+                    circle.x = nodo.lat;
+                    circle.y = nodo.long;
+
+                    var color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+
+                    var shape = new createjs.Shape();
+                    shape.graphics.beginFill(color).drawCircle(0, 0, 30);
+
+                    var text = new createjs.Text("#" + circle.name + " " + circle.x + "," + circle.y, "Helvetica", "#fff");
+                    text.textAlign = "center";
+                    text.textBaseline = "middle";
+
+                    circle.addChild(shape, text);
+
+                    stage.addChild(circle);
+
+
+                }
+
+                function createGrafo(nodos, stage) {
+
+                    stage.clear();
+                    stage.removeAllChildren();
+                    stage.update();
+                    for (var f = 0; f < nodos.length; f++) {
+                       
+                        if (nodos.length > 0) {
+                            for (var j = f; j < nodos.length; j++) {
+                                if (j !== f) {
+                                    createLine(nodos[f].lat, nodos[f].long, nodos[j].lat, nodos[j].long, stage);
+                                }
+
+                            }
+                        }
+ createNode(nodos[f], stage);
+
+                    }
+
+                }
+
+
+
+
+                var stage = new createjs.Stage('grafo');
+                stage.enableDOMEvents(true);
+                stage.addEventListener("stagemousedown", function (evt) {
+                    var n = new Nodo(i, evt.stageX, evt.stageY);
+                    nodos[i++] = n;
+                    stage.removeAllChildren();
+                    createGrafo(nodos, stage);
+                    stage.update();
+                });
+
+
+            }
+        </script>
+        <style>
+            html,body{
+                width: 100%;
+                padding: 0;
+                margin: 0;
+            }
+            canvas{
+                margin: 0 auto;
+                vertical-align: middle;
+                border: 1px solid red;
+                padding-left: 0;
+                padding-right: 0;
+                margin-left: auto;
+                margin-right: auto;
+                display: block;
+            }
+
+        </style>
+    </head>
+    <body onload="init();">
+        <canvas id="grafo" width="600" height="600" >
+            alternate content
+        </canvas>
+    </body>
+</html>

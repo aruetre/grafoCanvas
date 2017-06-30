@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>EaselJS Example: Double Click Example</title>
+
+	<link href="../_assets/css/shared.css" rel="stylesheet" type="text/css"/>
+	<link href="../_assets/css/examples.css" rel="stylesheet" type="text/css"/>
+	<script src="../_assets/js/examples.js"></script>
+
+	<script src="../lib/easeljs-NEXT.combined.js"></script>
+
+	<!-- We also provide hosted minified versions of all CreateJS libraries.
+	  http://code.createjs.com -->
+
+<script id="editable">
+	function init() {
+		var stage = new createjs.Stage('grafo');
+		for(var i=0; i < 5; i++) {
+	var circle = new createjs.Container();
+  circle.mouseChildren = false;
+  circle.name = i+1;
+  circle.x = Math.floor(Math.random() * 500) + 1;
+  circle.y = Math.floor(Math.random() * 500) + 1;
+
+  var color = '#'+Math.floor(Math.random()*16777215).toString(16);
+
+	var shape = new createjs.Shape();
+  shape.graphics.beginFill(color).drawCircle(0, 0, 20);
+
+  var text = new createjs.Text("#" + circle.name, "Helvetica", "#fff");
+  text.textAlign = "center";
+  text.textBaseline = "middle";
+
+	circle.addChild(shape, text);
+  stage.addChild(circle);
+
+  circle.on("click", function(event) {
+  	alert("clicked circle" + event.target.name);
+  });
+};
+
+stage.update();
+	}
+
+</script>
+</head>
+
+<body onload="init();">
+<header class="EaselJS">
+	<h1>Double Click Example</h1>
+
+	<p>An example to show how to use the <code>dblclick</code> event.</p>
+</header>
+
+<div>
+	<canvas id="testCanvas" width="960" height="400"></canvas>
+</div>
+</body>
+</html>
